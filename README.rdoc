@@ -1,7 +1,6 @@
-Not tested - 
 Quick ActiveRecord Extension.
-
 Adds self translating methods to translated ActiveRecord models
+(inspired by https://github.com/citizencast/acts_as_translatable)
 
 Example: 
 Given an ActiveRecord model with columns name_en and name_fr  
