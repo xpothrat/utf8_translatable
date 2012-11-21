@@ -8,6 +8,12 @@ module Utf8Translatable::Base
 
   # Defines Methods to extend ActiveRecord::Base
   module ClassMethods
+
+    # default state
+    def is_utf8_translatable?
+      false
+    end
+
     # Defines '_#{column_name}' prefixed methods for each column of the table
     # that returns the corresponding attribute value translated in the correct
     # locale and utf8 safe encoded
@@ -28,32 +34,37 @@ module Utf8Translatable::Base
     def ensures_translated_and_utf8
       if ActiveRecord::Base.connection.table_exists? table_name
         columns.map{|c| {:name => c.name.to_s, :type => c.type.to_s}}.each do |col|
-          if col[:type].try(:to_s) == 'string' || col[:type].try(:to_s) == 'text'
-            if is_translatable_attr?(col)
-              _attr = col[:name].gsub("_#{I18n.default_locale}", '')
-              define_method _universal_method(col) do
+          col_type, col_name = col[:type].try(:to_s), col[:name].try(:to_s)
+
+          if col_type == 'string' || col_type == 'text'
+            if is_translatable_attr?(col_type, col_name)
+              _attr = col_name.gsub("_#{I18n.default_locale}", '')
+
+              define_method _universal_method(col_name) do
                 if send("#{_attr}_#{I18n.locale}").nil? then nil else send("#{_attr}_#{I18n.locale}").force_encoding(Encoding::UTF_8) end
               end
+
             else
               # ensure encoded in utf-8
-              _attr = col[:name]
-              _utf8_method = "_#{col[:name]}".to_sym
+              _attr = col_name
+              _utf8_method = "_#{col_name}".to_sym
+
               define_method _utf8_method do
                 if send(_attr).nil? then nil else send(_attr).force_encoding(Encoding::UTF_8) end
               end
+
             end
           end
         end
       end
+
       define_singleton_method :is_utf8_translatable? do
         true
       end
+
     end
 
-    def is_utf8_translatable?
-      false
-    end
-
+    private
     # Defines is the attribute corresponds to a translatable attributes
     #
     # To be a translatable attribute it must
@@ -63,8 +74,8 @@ module Utf8Translatable::Base
     # * correspond to the default locale (ensures universal method is built only once 
     #   /+ that when it is built it has a fallback)
     #
-    def is_translatable_attr?(col)
-      (col[:type] == 'string' || col[:type] == 'text') and col[:name].split('_').last && I18n.available_locales.map(&:to_s).include?(col[:name].split('_').last) && col[:name].split('_').last.to_sym == I18n.default_locale
+    def is_translatable_attr?(col_type, col_name)
+      (col_type == 'string' || col_type == 'text') and col_name.split('_').last && I18n.available_locales.map(&:to_s).include?(col_name.split('_').last) && col_name.split('_').last.to_sym == I18n.default_locale
     end
 
     # Returns the universal method name for a translatable attr
@@ -75,9 +86,9 @@ module Utf8Translatable::Base
     #   _universal_method returns
     #   _name    
     #
-    def _universal_method(col)
+    def _universal_method(col_name)
       # create universal translated attr
-      "_#{col[:name].gsub("_#{I18n.default_locale}", '').to_sym}"
+      "_#{col_name.gsub("_#{I18n.default_locale}", '').to_sym}"
     end
   end
 end
