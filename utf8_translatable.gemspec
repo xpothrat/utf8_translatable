@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
   s.version     = Utf8Translatable::VERSION
   s.authors     = ["Nico Arbogast"]
   s.email       = ["nicolas.arbogast@gmail.com"]
-  s.homepage    = "TODO"
+  s.homepage    = "https://github.com/NicoArbogast/utf8_translatable"
   s.summary     = "Adds self translating methods to translated ActiveRecord models"
   s.description = "Example: Given an ActiveRecord model with columns name_en and name_fr, adding ensures_translated_and_utf8 to the model will provide a _name method returning the correct column given current I18n.locale"
 
