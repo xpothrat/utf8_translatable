@@ -1,10 +1,7 @@
 require_relative '../../spec_helper'
 
-require 'nulldb_rspec'
 describe Utf8Translatable::Base do
-  include NullDB::RSpec::NullifiedDatabase
   before do
-    ActiveRecord::Base.establish_connection :adapter => :nulldb
     ActiveRecord::Migration.create_table(:translatables) do |t|
         t.string :col_en
         t.string :col_fr
@@ -23,8 +20,4 @@ describe Utf8Translatable::Base do
       instance._col.should eql instance.send("col_#{l}")
     end
   end
-end
-
-shared_examples "utf8_translatable" do
-  it { described_class.is_utf8_translatable?.should eql true }
 end
