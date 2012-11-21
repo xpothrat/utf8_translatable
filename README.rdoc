@@ -6,5 +6,5 @@ Adds self translating methods to translated ActiveRecord models
 Example: 
 Given an ActiveRecord model with columns name_en and name_fr  
 Adding ensures_translated_and_utf8 to the model   
-Will provide a _name method   
+will provide a _name method   
 that returns the correct (column) attribute value given current I18n.locale
