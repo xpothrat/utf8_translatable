@@ -64,7 +64,7 @@ module Utf8Translatable::Base
     #   /+ that when it is built it has a fallback)
     #
     def is_translatable_attr?(col)
-      (col[:type] == 'string' || col[:type] == 'text') and col[:name].split('_').last && I18n.available_locales.include?(col[:name].split('_').last.to_sym) && col[:name].split('_').last.to_sym == I18n.default_locale
+      (col[:type] == 'string' || col[:type] == 'text') and col[:name].split('_').last && I18n.available_locales.map(&:to_s).include?(col[:name].split('_').last) && col[:name].split('_').last.to_sym == I18n.default_locale
     end
 
     # Returns the universal method name for a translatable attr
