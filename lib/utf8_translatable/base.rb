@@ -1,3 +1,6 @@
+require 'active_record'
+require 'active_support/all'
+
 # translates translatable columns (ex: title_en / title_fr => _title)
 # ensures db queries return utf8 safe strings (monkey patching linked to ruby encoding issues in 2010)
 module Utf8Translatable::Base
@@ -5,7 +8,6 @@ module Utf8Translatable::Base
 
   # Defines Methods to extend ActiveRecord::Base
   module ClassMethods
-
     # Defines '_#{column_name}' prefixed methods for each column of the table
     # that returns the corresponding attribute value translated in the correct
     # locale and utf8 safe encoded
@@ -26,7 +28,7 @@ module Utf8Translatable::Base
     def ensures_translated_and_utf8
       if ActiveRecord::Base.connection.table_exists? table_name
         columns.map{|c| {:name => c.name.to_s, :type => c.type.to_s}}.each do |col|
-          if col[:type] == 'string' || col[:type] == 'text'
+          if col[:type].try(:to_s) == 'string' || col[:type].try(:to_s) == 'text'
             if is_translatable_attr?(col)
               _attr = col[:name].gsub("_#{I18n.default_locale}", '')
               define_method _universal_method(col) do
@@ -43,6 +45,13 @@ module Utf8Translatable::Base
           end
         end
       end
+      define_singleton_method :is_utf8_translatable? do
+        true
+      end
+    end
+
+    def is_utf8_translatable?
+      false
     end
 
     # Defines is the attribute corresponds to a translatable attributes
@@ -55,7 +64,7 @@ module Utf8Translatable::Base
     #   /+ that when it is built it has a fallback)
     #
     def is_translatable_attr?(col)
-      (col[:type] == 'string' || col[:type] == 'text') and col[:name].split('_').last && I18n.available_locales.include?(col[:name].split('_').last) && col[:name].split('_').last.to_sym == I18n.default_locale
+      (col[:type] == 'string' || col[:type] == 'text') and col[:name].split('_').last && I18n.available_locales.include?(col[:name].split('_').last.to_sym) && col[:name].split('_').last.to_sym == I18n.default_locale
     end
 
     # Returns the universal method name for a translatable attr

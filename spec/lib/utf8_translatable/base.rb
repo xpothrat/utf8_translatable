@@ -1,4 +1,4 @@
-require '../../spec_helper'
+require_relative '../../spec_helper'
 
 require 'nulldb_rspec'
 describe Utf8Translatable::Base do

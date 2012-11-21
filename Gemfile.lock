@@ -2,8 +2,7 @@ PATH
   remote: .
   specs:
     utf8_translatable (0.0.1)
-      activerecord (~> 3.0)
-      rails (~> 3.2.9)
+      rails (~> 3.2.8)
 
 GEM
   remote: http://rubygems.org/

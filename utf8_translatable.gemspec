@@ -19,7 +19,6 @@ Gem::Specification.new do |s|
 
   s.add_development_dependency "mysql2"
   s.add_development_dependency "rspec-rails"
-  s.add_dependency "activerecord", "~> 3.0"
   s.add_development_dependency "activerecord-nulldb-adapter"
 
 end
