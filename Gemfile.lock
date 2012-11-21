@@ -2,6 +2,7 @@ PATH
   remote: .
   specs:
     utf8_translatable (0.0.1)
+      activerecord (~> 3.0)
       rails (~> 3.2.9)
 
 GEM
@@ -28,6 +29,8 @@ GEM
       activesupport (= 3.2.9)
       arel (~> 3.0.2)
       tzinfo (~> 0.3.29)
+    activerecord-nulldb-adapter (0.2.3)
+      activerecord (>= 2.0.0)
     activeresource (3.2.9)
       activemodel (= 3.2.9)
       activesupport (= 3.2.9)
@@ -105,6 +108,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  activerecord-nulldb-adapter
   jquery-rails
   mysql2
   rspec-rails
