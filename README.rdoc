@@ -7,3 +7,8 @@ Given an ActiveRecord model with columns name_en and name_fr
 Adding ensures_translated_and_utf8 to the model   
 will provide a _name method   
 that returns the correct (column) attribute value given current I18n.locale
+
+Rspec : require 'utf8_translatable/spec_support' => provides you with a
+shares example. To use it simply add it_behaves_like "utf8_translatable" to
+your ActiveRecord models tests.    
+NB: this shared example only checks if the model is_utf8_translatable? == true.
