@@ -1,6 +1,6 @@
 # translates translatable columns (ex: title_en / title_fr => _title)
 # ensures db queries return utf8 safe strings (monkey patching linked to ruby encoding issues in 2010)
-class Utf8Translatable::Base
+module Utf8Translatable::Base
   extend ActiveSupport::Concern
 
   # Defines Methods to extend ActiveRecord::Base
