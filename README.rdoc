@@ -1,0 +1,3 @@
+= Utf8Translatable
+
+This project rocks and uses MIT-LICENSE.
