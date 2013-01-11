@@ -6,28 +6,6 @@ require 'active_support/all'
 module Utf8Translatable::Base
   extend ActiveSupport::Concern
 
-  included do
-
-    # if a model calls a _name method (assuming the model is utf8_translatable)
-    # then running the migrations (before the name_en and name_fr actually exist)
-    # won't work until the columns name_en and name_fr have actually been created
-    # the method_missing should prevent this
-    #
-    rescue_from 'ActiveRecord::NoMethodError' do |e|
-      raise_unless_utf8_translatable_method(e)
-    end
-  end
-
-  def raise_unless_utf8_translatable_method(exception = nil)
-    if message =~ /^undefined method `_(\w+)'/
-      #translated_attr = "#{$1}_#{I18n.locale.to_s}"
-      #respond_to?(translated_attr) ? send(translated_attr) : nil
-      nil
-    else
-      raise exception
-    end
-  end
-
   # Defines Methods to extend ActiveRecord::Base
   module ClassMethods
 
@@ -82,6 +60,19 @@ module Utf8Translatable::Base
 
       define_singleton_method :is_utf8_translatable? do
         true
+      end
+
+      # if a model calls a _name method (assuming the model is utf8_translatable)
+      # then running the migrations (before the name_en and name_fr actually exist)
+      # won't work until the columns name_en and name_fr have actually been created
+      # the method_missing should prevent this
+      #
+      def safe_alias(arg1,arg2)
+        if new.respond_to?(arg2)
+          nil
+        else
+          alias arg1 arg2
+        end    
       end
 
     end
