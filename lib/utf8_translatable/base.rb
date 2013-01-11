@@ -67,9 +67,9 @@ module Utf8Translatable::Base
       # won't work until the columns name_en and name_fr have actually been created
       # this method should prevent this
       #
-      def utf8_translatable_alias(arg1,arg2)
+      def utf8_translatable_alias(arg1, arg2)
         if ActiveRecord::Base.connection.table_exists? table_name
-          alias arg1 arg2
+          send(:alias_method, arg1, arg2)
         else
           nil
         end    
