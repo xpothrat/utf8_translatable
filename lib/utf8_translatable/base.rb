@@ -64,6 +64,21 @@ module Utf8Translatable::Base
 
     end
 
+    # if a model calls a _name method (assuming the model is utf8_translatable)
+    # then running the migrations (before the name_en and name_fr actually exist)
+    # won't work until the columns name_en and name_fr have actually been created
+    # the method_missing should prevent this
+    #
+    def method_missing(sym, *args)
+      if sym.to_s =~ /^_(\w+)$/
+        #translated_attr = "#{$1}_#{I18n.locale.to_s}"
+        #respond_to?(translated_attr) ? send(translated_attr) : nil
+        nil
+      else
+        super
+      end
+    end
+
     private
     # Defines is the attribute corresponds to a translatable attributes
     #
