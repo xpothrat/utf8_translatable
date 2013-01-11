@@ -13,8 +13,9 @@ module Utf8Translatable::Base
     # won't work until the columns name_en and name_fr have actually been created
     # the method_missing should prevent this
     #
-    rescue ActiveRecord::NoMethodError => e
-      raise_unless_utf8_translatable_method(e)    
+    rescue_from 'ActiveRecord::NoMethodError' do |e|
+      raise_unless_utf8_translatable_method(e)
+    end
   end
 
   def raise_unless_utf8_translatable_method(exception = nil)
