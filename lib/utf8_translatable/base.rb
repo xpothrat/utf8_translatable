@@ -69,13 +69,16 @@ module Utf8Translatable::Base
     # won't work until the columns name_en and name_fr have actually been created
     # the method_missing should prevent this
     #
-    def method_missing(sym, *args)
-      if sym.to_s =~ /^_(\w+)$/
+    rescue ActiveRecord::NoMethodError => e
+      raise_unless_utf8_translatable_method(e)
+
+    def raise_unless_utf8_translatable_method(exception = nil)
+      if message =~ /^undefined method `_(\w+)'/
         #translated_attr = "#{$1}_#{I18n.locale.to_s}"
         #respond_to?(translated_attr) ? send(translated_attr) : nil
         nil
       else
-        super
+        raise exception
       end
     end
 
