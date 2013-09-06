@@ -62,6 +62,19 @@ module Utf8Translatable::Base
         true
       end
 
+      # if a model calls a _name method (assuming the model is utf8_translatable)
+      # then running the migrations (before the name_en and name_fr actually exist)
+      # won't work until the columns name_en and name_fr have actually been created
+      # this method should prevent this
+      #
+      def utf8_translatable_alias(arg1, arg2)
+        if ActiveRecord::Base.connection.table_exists? table_name
+          send(:alias_method, arg1, arg2)
+        else
+          nil
+        end    
+      end
+
     end
 
     private

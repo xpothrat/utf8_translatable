@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    utf8_translatable (0.0.1)
+    utf8_translatable (0.0.0.2)
       rails (~> 3.2.8)
 
 GEM
